@@ -245,6 +245,31 @@ Player.prototype.takeItem = function ( item ) {
  * @param {Weapon} itemToEquip  The weapon item to equip.
  */
 
+Player.prototype.equip = function( itemToEquip ) {
+  var backPack = backPack = this.getPack();
+  var itemIndex = backPack.indexOf(itemToEquip);
+
+
+  if (itemToEquip instanceof Weapon && itemIndex > -1) {
+
+    if (this.equipped) {
+      console.log(this.equipped.name, 'is equipped');
+      var weaponSwap = this.equipped;
+      var weaponToSet = backPack.splice(itemIndex, 1)[0];
+      this.takeItem(weaponSwap);
+      this.equipped = weaponToSet;
+      return true;
+    } else { 
+      console.log('nothing equipped');
+      var weaponToSet = backPack.splice(itemIndex, 1)[0]; 
+      this.equipped = weaponToSet;
+      return true;
+    } 
+  } else {     
+    console.log("Failed to equipped ", itemToEquip.name);
+    return false;
+  } 
+};
 
 /**
  * Player Class Method => eat(itemToEat)
