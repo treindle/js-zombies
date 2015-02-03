@@ -536,6 +536,43 @@ ExplodingZombie.prototype = Object.create( Zombie.prototype, {
  * @return {number}   The amount of damage the creature will inflict.
  */
 
+function calculateAttackDamage ( creature ) {
+  var randVal; 
+  function randomizer( x, y ) {
+    return Math.floor((Math.random() * x) + y);
+  }; 
+  function calculateDamage ( value ) {
+    return Math.floor((creature.strength / value) + (Math.log(creature.speed) / value * 10))
+  };
+
+  if ( creature instanceof ExplodingZombie ) {
+    randVal = randomizer( 3, 3 );
+    return calculateDamage( randVal );
+  
+  } else if ( creature instanceof RangedZombie ) {
+    randVal = randomizer( 6, 2 );
+    return calculateDamage( randVal );
+    
+  } else if ( creature instanceof StrongZombie ) {
+    randVal = randomizer( 8, 2 );
+    return calculateDamage( randVal );
+    
+  } else if ( creature instanceof FastZombie ) {
+    randVal = randomizer( 4, 2 );
+    return calculateDamage( randVal );
+    
+  } else if ( creature instanceof Zombie ) {
+    randVal = randomizer( 3, 5 );
+    return calculateDamage( randVal );
+    
+  } else if ( creature instanceof Player ) {
+    randVal = randomizer( 3, 2 );
+    return calculateDamage( randVal );
+
+  } else {
+    return console.log("Error: Unknown creature.");
+  }
+}
 
 /**
  * Zombie takes damage.
@@ -550,6 +587,16 @@ ExplodingZombie.prototype = Object.create( Zombie.prototype, {
  * @param {number} damage   The amount of damage the zombie receives.
  */
 
+Zombie.prototype.takeDamage = function ( damage ) {
+
+  this.health -= damage;
+
+  if (this.health <= 0) {
+    this.health = 0;
+    this.isAlive = false;
+    return console.log("Zombie is slain!");
+  }
+};
 
 /**
  * Player attacks a zombie.
@@ -567,6 +614,24 @@ ExplodingZombie.prototype = Object.create( Zombie.prototype, {
  * @param {Zombie} zombie   The zombie to attack.
  * @return {number}         Damage dealt by attacking.
  */
+
+Player.prototype.attack = function ( zombie ) {
+
+  var baseDamage = calculateAttackDamage(this);
+  var zombieDamage;
+
+  if (this.equipped) {
+    zombieDamage = baseDamage + this.equipped.damage
+    zombie.takeDamage(zombieDamage);
+    console.log(this.equipped.name, " damages the Zombie for ", zombieDamage, " points.");
+  } else {
+    zombieDamage = baseDamage;
+    zombie.takeDamage(zombieDamage);
+    console.log(this.name, " punches zombie for ", zombieDamage, " points.");
+
+  }
+  return zombieDamage;
+};
 
 
 /**
