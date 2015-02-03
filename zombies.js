@@ -167,6 +167,18 @@ Player.prototype.checkPack = function () {
  * @return {boolean} true/false     Whether player was able to store item in pack.
  */
 
+Player.prototype.takeItem = function ( item ) {
+
+  var backPack = this.getPack();
+  if (backPack.length >= 3) {
+    console.log(this.name, ": pack is full so ", item.name, " could not be stored." );
+    return false;
+  } else {
+    backPack.push(item);
+    console.log(this.name, ": ", item.name, " has been added to your pack.");
+    return true;
+  }
+}
 
 /**
  * Player Class Method => discardItem(item)
@@ -193,6 +205,24 @@ Player.prototype.checkPack = function () {
  * @param {Item/Weapon/Food} item   The item to discard.
  * @return {boolean} true/false     Whether player was able to remove item from pack.
  */
+
+ Player.prototype.discardItem = function ( item ) {
+
+  var backPack = this.getPack();
+  var itemIndex = backPack.indexOf(item);
+  
+    if (itemIndex === -1) {
+      console.log("Nothing was discarded because it could not be found.");
+      return false;
+
+    } else {
+      var removedItemArr = backPack.splice(itemIndex, 1);
+      var removedItem = removedItemArr[0];
+      console.log(this.name, ": ", removedItem.name, " was discarded.");
+      return true;
+    }
+
+ }
 
 
 /**
