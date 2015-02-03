@@ -142,6 +142,12 @@ function Player ( name, health, strength, speed ) {
  * @name checkPack
  */
 
+Player.prototype.checkPack = function () {
+
+  var backPack = this.getPack(); 
+
+  return console.log(backPack.join('\n'));
+}
 
 /**
  * Player Class Method => takeItem(item)
