@@ -290,6 +290,20 @@ Player.prototype.equip = function( itemToEquip ) {
  * @param {Food} itemToEat  The food item to eat.
  */
 
+Player.prototype.eat = function( itemToEat ) {
+
+
+  var backPack = this.getPack();
+  var itemIndex = backPack.indexOf(itemToEat);
+
+  if (itemToEat instanceof Food && itemIndex > -1) {
+    var eatenFood = backPack.splice(itemIndex, 1)[0];
+    this.health += eatenFood.energy;
+    if (this.health > this.getMaxHealth()) {
+      this.health = this.getMaxHealth();
+    }    
+  }
+}
 
 /**
  * Player Class Method => useItem(item)
@@ -304,6 +318,16 @@ Player.prototype.equip = function( itemToEquip ) {
  * @param {Item/Weapon/Food} item   The item to use.
  */
 
+Player.prototype.useItem = function( item ) {
+  
+  if (item instanceof Weapon) {
+    this.equip(item);
+  } else if (item instanceof Food) {
+    this.eat(item);
+  } else {
+    return console.log(this.name, ": looks curiously at ", item.name);
+  }
+};
 
 /**
  * Player Class Method => equippedWith()
@@ -319,6 +343,16 @@ Player.prototype.equip = function( itemToEquip ) {
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
 
+Player.prototype.equippedWith = function() {
+  
+  if (this.equipped) {
+    return this.equipped.name;
+    
+  } else {
+    console.log(this.name, "is unarmed.");
+    return false;
+  }
+};
 
 /**
  * Class => Zombie(health, strength, speed)
