@@ -647,6 +647,16 @@ Player.prototype.attack = function ( zombie ) {
  * @param {number} damage   The amount of damage the player receives.
  */
 
+Player.prototype.takeDamage = function ( damage ) {
+
+    this.health -= damage;
+
+  if (this.health <= 0) {
+    this.health = 0;
+    this.isAlive = false;
+    return console.log("GAME OVER! You're dead...");
+  }
+};
 
 /**
  * Zombie attacks a player.
@@ -661,6 +671,16 @@ Player.prototype.attack = function ( zombie ) {
  * @return {number}         Damage dealt by attacking.
  */
 
+Zombie.prototype.attack = function( player ) { 
+
+  var baseDamage = calculateAttackDamage(this);
+     
+    player.takeDamage(baseDamage);
+    console.log("Zombie attacks ", player.name, " for ", baseDamage, " points.");
+
+  return baseDamage;
+
+};
 
 /**
  * FastZombie charges at full speed.
@@ -679,6 +699,13 @@ Player.prototype.attack = function ( zombie ) {
  * @return {number}         Damage dealt by charging.
  */
 
+FastZombie.prototype.charge = function( player ) {
+  var baseDamage = calculateAttackDamage(this);
+
+  if (this.speed > player.speed) {
+    player.takeDamage(baseDamage);
+  }
+};
 
 /**
  * StrongZombie crushes with might.
